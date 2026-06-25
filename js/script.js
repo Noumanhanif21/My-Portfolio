@@ -1,42 +1,43 @@
-// ======================
-// TYPING EFFECT
-// ======================
+/* =========================
+TYPING ANIMATION
+========================= */
 
 const words = [
+
     "Flutter Developer",
     "Mobile App Developer",
     "Firebase Expert",
-    "Freelancer",
-    "UI/UX Enthusiast"
+    "REST API Integration Specialist",
+    "Freelancer"
+
 ];
 
 let wordIndex = 0;
 let charIndex = 0;
-let currentWord = "";
-let currentChar = "";
 
 function typeEffect() {
 
-    if (wordIndex === words.length) {
-        wordIndex = 0;
-    }
+    const typingElement =
+        document.getElementById("typing");
 
-    currentWord = words[wordIndex];
+    const currentWord =
+        words[wordIndex];
 
-    currentChar = currentWord.slice(
-        0,
-        ++charIndex
-    );
+    typingElement.textContent =
+        currentWord.substring(
+            0,
+            charIndex + 1
+        );
 
-    document.getElementById("typing").textContent =
-        currentChar;
+    charIndex++;
 
-    if (currentChar.length === currentWord.length) {
+    if (charIndex === currentWord.length) {
 
-        wordIndex++;
-        charIndex = 0;
+        setTimeout(() => {
 
-        setTimeout(typeEffect, 1500);
+            eraseEffect();
+
+        }, 1500);
 
     } else {
 
@@ -44,139 +45,169 @@ function typeEffect() {
     }
 }
 
-typeEffect();
+function eraseEffect() {
 
+    const typingElement =
+        document.getElementById("typing");
 
-// ======================
-// PROJECT IMAGE SLIDER
-// ======================
+    const currentWord =
+        words[wordIndex];
 
-const screenshots = [
+    typingElement.textContent =
+        currentWord.substring(
+            0,
+            charIndex - 1
+        );
 
-    "assets/images/brikol.png",
-    "assets/images/estate.png",
-    "assets/images/tennis.png",
-    "assets/images/snapcart.png"
+    charIndex--;
 
-];
+    if (charIndex === 0) {
 
-let imageIndex = 0;
+        wordIndex++;
 
-setInterval(() => {
+        if (wordIndex >= words.length) {
 
-    const image =
-        document.getElementById("project-image");
+            wordIndex = 0;
+        }
 
-    if (!image) return;
-
-    imageIndex++;
-
-    if (imageIndex >= screenshots.length) {
-        imageIndex = 0;
-    }
-
-    image.src = screenshots[imageIndex];
-
-}, 3000);
-
-
-// ======================
-// SCROLL REVEAL
-// ======================
-
-const observer =
-    new IntersectionObserver(entries => {
-
-        entries.forEach(entry => {
-
-            if (entry.isIntersecting) {
-
-                entry.target.classList.add("show");
-
-            }
-
-        });
-
-    });
-
-document
-    .querySelectorAll(
-        '.skill-card,.project-card,.timeline-item'
-    )
-    .forEach(el => {
-
-        el.classList.add('hidden');
-
-        observer.observe(el);
-
-    });
-
-
-// ======================
-// NAVBAR SHADOW
-// ======================
-
-window.addEventListener("scroll", () => {
-
-    const nav =
-        document.querySelector("nav");
-
-    if (window.scrollY > 50) {
-
-        nav.style.boxShadow =
-            "0 10px 30px rgba(0,0,0,.3)";
+        setTimeout(typeEffect, 200);
 
     } else {
 
-        nav.style.boxShadow = "none";
-
+        setTimeout(eraseEffect, 50);
     }
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (words.length) {
+
+            setTimeout(typeEffect, 500);
+        }
+    }
+);
+
+
+/* =========================
+NAVBAR SHADOW ON SCROLL
+========================= */
+
+window.addEventListener(
+    "scroll",
+    function () {
+
+        const nav =
+            document.querySelector("nav");
+
+        if (window.scrollY > 50) {
+
+            nav.style.boxShadow =
+                "0 10px 30px rgba(0,0,0,.4)";
+
+        } else {
+
+            nav.style.boxShadow = "none";
+        }
+    }
+);
+
+
+/* =========================
+SCROLL REVEAL ANIMATION
+========================= */
+
+const revealElements =
+    document.querySelectorAll(
+
+        ".skill-card, .project-card, .timeline-item, .stat"
+
+    );
+
+const observer =
+    new IntersectionObserver(
+
+        entries => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add(
+                        "active"
+                    );
+                }
+            });
+
+        },
+
+        {
+            threshold: 0.15
+        }
+
+    );
+
+revealElements.forEach(element => {
+
+    element.classList.add("hidden");
+
+    observer.observe(element);
 
 });
 
 
-// ======================
-// MODAL
-// ======================
+/* =========================
+SMOOTH SCROLL
+========================= */
 
-const modal =
-    document.getElementById("projectModal");
+document
+    .querySelectorAll('a[href^="#"]')
 
-const closeBtn =
-    document.querySelector(".close");
+    .forEach(anchor => {
 
-if (closeBtn) {
+        anchor.addEventListener(
+            "click",
 
-    closeBtn.onclick = () => {
+            function (e) {
 
-        modal.style.display = "none";
+                e.preventDefault();
 
-    };
+                document
+                    .querySelector(
 
-}
+                        this.getAttribute("href")
 
-window.onclick = (e) => {
+                    )
 
-    if (e.target === modal) {
+                    .scrollIntoView({
 
-        modal.style.display = "none";
+                        behavior: "smooth"
 
-    }
+                    });
 
-};
+            }
+
+        );
+
+    });
 
 
-// ======================
-// CONTACT FORM
-// ======================
+/* =========================
+CONTACT FORM
+========================= */
 
 const form =
-    document.getElementById("contact-form");
+    document.getElementById(
+        "contact-form"
+    );
 
 if (form) {
 
     form.addEventListener(
+
         "submit",
+
         function (e) {
 
             e.preventDefault();
@@ -186,7 +217,184 @@ if (form) {
             );
 
             form.reset();
-
         }
+
     );
 }
+
+
+/* =========================
+PROJECT SHOWCASE SLIDER
+========================= */
+
+const projectImages = [
+
+    "assets/projects/brikol.png",
+
+    "assets/projects/estate.png",
+
+    "assets/projects/tennis.png",
+
+    "assets/projects/snapcart.png"
+
+];
+
+let currentImage = 0;
+
+function createHeroSlider() {
+
+    const profile =
+        document.querySelector(
+            ".profile-wrapper img"
+        );
+
+    if (!profile) return;
+
+    setInterval(() => {
+
+        currentImage++;
+
+        if (
+            currentImage >=
+            projectImages.length
+        ) {
+
+            currentImage = 0;
+        }
+
+    }, 4000);
+}
+
+createHeroSlider();
+
+
+/* =========================
+COUNTER ANIMATION
+========================= */
+
+const counters =
+    document.querySelectorAll(
+        ".stat h3"
+    );
+
+const speed = 200;
+
+counters.forEach(counter => {
+
+    const updateCounter = () => {
+
+        const target =
+            parseInt(
+                counter.innerText
+            );
+
+        if (isNaN(target)) return;
+
+        const count =
+            +counter.getAttribute(
+                "data-count"
+            ) || 0;
+
+        const increment =
+            target / speed;
+
+        if (count < target) {
+
+            counter.setAttribute(
+                "data-count",
+                Math.ceil(
+                    count + increment
+                )
+            );
+
+            counter.innerText =
+                Math.ceil(
+                    count + increment
+                );
+
+            setTimeout(
+                updateCounter,
+                10
+            );
+
+        } else {
+
+            counter.innerText =
+                target;
+        }
+    };
+
+    updateCounter();
+
+});
+
+
+/* =========================
+BACK TO TOP BUTTON
+========================= */
+
+const backToTop =
+    document.createElement("button");
+
+backToTop.innerHTML =
+    "↑";
+
+backToTop.id =
+    "backToTop";
+
+document.body.appendChild(
+    backToTop
+);
+
+backToTop.style.cssText = `
+position:fixed;
+bottom:30px;
+right:30px;
+width:50px;
+height:50px;
+border:none;
+border-radius:50%;
+background:#22c55e;
+color:white;
+font-size:22px;
+cursor:pointer;
+display:none;
+z-index:999;
+`;
+
+window.addEventListener(
+    "scroll",
+
+    () => {
+
+        if (
+            window.scrollY > 400
+        ) {
+
+            backToTop.style.display =
+                "block";
+
+        } else {
+
+            backToTop.style.display =
+                "none";
+        }
+    }
+
+);
+
+backToTop.addEventListener(
+    "click",
+
+    () => {
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+        });
+
+    }
+
+);
