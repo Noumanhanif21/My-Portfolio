@@ -121,7 +121,7 @@ SCROLL REVEAL ANIMATION
 const revealElements =
     document.querySelectorAll(
 
-        ".skill-card, .project-card, .timeline-item, .stat, .testimonial-card"
+        ".skill-card, .project-card, .timeline-item, .stat"
 
     );
 
