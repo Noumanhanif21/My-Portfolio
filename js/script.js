@@ -1,80 +1,192 @@
-// Typing Animation
+// ======================
+// TYPING EFFECT
+// ======================
 
-const text = [
+const words = [
     "Flutter Developer",
     "Mobile App Developer",
     "Firebase Expert",
+    "Freelancer",
     "UI/UX Enthusiast"
 ];
 
-let count = 0;
-let index = 0;
-let currentText = "";
-let letter = "";
+let wordIndex = 0;
+let charIndex = 0;
+let currentWord = "";
+let currentChar = "";
 
-(function type() {
+function typeEffect() {
 
-    if (count === text.length) {
-        count = 0;
+    if (wordIndex === words.length) {
+        wordIndex = 0;
     }
 
-    currentText = text[count];
-    letter = currentText.slice(0, ++index);
+    currentWord = words[wordIndex];
 
-    document.getElementById("typing").textContent = letter;
+    currentChar = currentWord.slice(
+        0,
+        ++charIndex
+    );
 
-    if (letter.length === currentText.length) {
+    document.getElementById("typing").textContent =
+        currentChar;
 
-        count++;
-        index = 0;
+    if (currentChar.length === currentWord.length) {
 
-        setTimeout(type, 1500);
+        wordIndex++;
+        charIndex = 0;
+
+        setTimeout(typeEffect, 1500);
 
     } else {
 
-        setTimeout(type, 100);
+        setTimeout(typeEffect, 100);
+    }
+}
+
+typeEffect();
+
+
+// ======================
+// PROJECT IMAGE SLIDER
+// ======================
+
+const screenshots = [
+
+    "assets/images/brikol.png",
+    "assets/images/estate.png",
+    "assets/images/tennis.png",
+    "assets/images/snapcart.png"
+
+];
+
+let imageIndex = 0;
+
+setInterval(() => {
+
+    const image =
+        document.getElementById("project-image");
+
+    if (!image) return;
+
+    imageIndex++;
+
+    if (imageIndex >= screenshots.length) {
+        imageIndex = 0;
     }
 
-})();
+    image.src = screenshots[imageIndex];
+
+}, 3000);
 
 
-// Scroll Animation
+// ======================
+// SCROLL REVEAL
+// ======================
 
-const observer = new IntersectionObserver(entries => {
+const observer =
+    new IntersectionObserver(entries => {
 
-    entries.forEach(entry => {
+        entries.forEach(entry => {
 
-        if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-        }
+            if (entry.isIntersecting) {
+
+                entry.target.classList.add("show");
+
+            }
+
+        });
 
     });
 
-});
+document
+    .querySelectorAll(
+        '.skill-card,.project-card,.timeline-item'
+    )
+    .forEach(el => {
 
-const hiddenElements = document.querySelectorAll(
-    ".card,.project-card,.timeline-item"
-);
+        el.classList.add('hidden');
 
-hiddenElements.forEach(el => {
+        observer.observe(el);
 
-    el.classList.add("hidden");
-
-    observer.observe(el);
-
-});
+    });
 
 
-// Navbar Background Change
+// ======================
+// NAVBAR SHADOW
+// ======================
 
 window.addEventListener("scroll", () => {
 
-    const nav = document.querySelector("nav");
+    const nav =
+        document.querySelector("nav");
 
     if (window.scrollY > 50) {
-        nav.style.boxShadow = "0 5px 20px rgba(0,0,0,0.3)";
+
+        nav.style.boxShadow =
+            "0 10px 30px rgba(0,0,0,.3)";
+
     } else {
+
         nav.style.boxShadow = "none";
+
     }
 
 });
+
+
+// ======================
+// MODAL
+// ======================
+
+const modal =
+    document.getElementById("projectModal");
+
+const closeBtn =
+    document.querySelector(".close");
+
+if (closeBtn) {
+
+    closeBtn.onclick = () => {
+
+        modal.style.display = "none";
+
+    };
+
+}
+
+window.onclick = (e) => {
+
+    if (e.target === modal) {
+
+        modal.style.display = "none";
+
+    }
+
+};
+
+
+// ======================
+// CONTACT FORM
+// ======================
+
+const form =
+    document.getElementById("contact-form");
+
+if (form) {
+
+    form.addEventListener(
+        "submit",
+        function (e) {
+
+            e.preventDefault();
+
+            alert(
+                "Thanks for reaching out! I'll get back to you soon."
+            );
+
+            form.reset();
+
+        }
+    );
+}
