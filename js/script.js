@@ -121,7 +121,7 @@ SCROLL REVEAL ANIMATION
 const revealElements =
     document.querySelectorAll(
 
-        ".skill-card, .project-card, .timeline-item, .stat"
+        ".skill-card, .project-card, .timeline-item, .stat, .testimonial-card"
 
     );
 
@@ -224,51 +224,6 @@ if (form) {
 
 
 /* =========================
-PROJECT SHOWCASE SLIDER
-========================= */
-
-const projectImages = [
-
-    "assets/projects/brikol.png",
-
-    "assets/projects/estate.png",
-
-    "assets/projects/tennis.png",
-
-    "assets/projects/snapcart.png"
-
-];
-
-let currentImage = 0;
-
-function createHeroSlider() {
-
-    const profile =
-        document.querySelector(
-            ".profile-wrapper img"
-        );
-
-    if (!profile) return;
-
-    setInterval(() => {
-
-        currentImage++;
-
-        if (
-            currentImage >=
-            projectImages.length
-        ) {
-
-            currentImage = 0;
-        }
-
-    }, 4000);
-}
-
-createHeroSlider();
-
-
-/* =========================
 COUNTER ANIMATION
 ========================= */
 
@@ -281,14 +236,18 @@ const speed = 200;
 
 counters.forEach(counter => {
 
+    const originalText = counter.innerText;
+
+    const target =
+        parseInt(originalText);
+
+    if (isNaN(target)) return;
+
+    // preserve any trailing characters like "+" or "%"
+    const suffix =
+        originalText.replace(/^[0-9]+/, "");
+
     const updateCounter = () => {
-
-        const target =
-            parseInt(
-                counter.innerText
-            );
-
-        if (isNaN(target)) return;
 
         const count =
             +counter.getAttribute(
@@ -300,17 +259,15 @@ counters.forEach(counter => {
 
         if (count < target) {
 
+            const next = Math.ceil(count + increment);
+
             counter.setAttribute(
                 "data-count",
-                Math.ceil(
-                    count + increment
-                )
+                next
             );
 
             counter.innerText =
-                Math.ceil(
-                    count + increment
-                );
+                next + suffix;
 
             setTimeout(
                 updateCounter,
@@ -320,7 +277,7 @@ counters.forEach(counter => {
         } else {
 
             counter.innerText =
-                target;
+                target + suffix;
         }
     };
 
